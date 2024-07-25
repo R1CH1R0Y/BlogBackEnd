@@ -4,6 +4,7 @@ const cors = require("cors")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const userModel = require("./models/users")
+const postModel = require("./models/posts")
 
 let app = express()
 
@@ -11,6 +12,21 @@ app.use(express.json())
 app.use(cors())
 
 mongoose.connect("mongodb+srv://Richi2001:R1CH1R0Y@cluster0.ulfkc.mongodb.net/blogAppDb?retryWrites=true&w=majority&appName=Cluster0")
+
+
+app.post("/create",async(req,res)=>{
+    let input=req.body
+    let token=req.headers.token
+    jwt.verify(token,"blogApp",async(error,decoded)=>{
+        if(decoded){
+            let result=new postModel(input)
+            await result.save()
+            res.json({"status":"success"})
+        }else{
+            res.json({"status":"invalid authentication"})
+        }
+    })
+})
 
 app.post("/signup", async (req, res) => {
     let input = req.body
