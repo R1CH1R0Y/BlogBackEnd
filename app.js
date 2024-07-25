@@ -28,6 +28,25 @@ app.post("/create",async(req,res)=>{
     })
 })
 
+app.post("/viewall",(req,res)=>{
+    let token=req.headers.token
+    jwt.verify(token,"blogApp",(error,decoded)=>{
+        if(decoded){
+            postModel.find().then(
+                (items)=>{
+                    res.json(items)
+                }
+            ).catch(
+                (error)=>{
+                    res.json({"status":"error"})
+                }
+            )
+        }else{
+            res.json({"status":"invalid authentication"})
+        }
+    })
+})
+
 app.post("/signup", async (req, res) => {
     let input = req.body
     let hashedPassword = bcrypt.hashSync(req.body.password, 10)
