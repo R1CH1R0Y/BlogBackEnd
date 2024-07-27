@@ -32,7 +32,7 @@ app.post("/viewall",(req,res)=>{
     let token=req.headers.token
     jwt.verify(token,"blogApp",(error,decoded)=>{
         if(decoded){
-            postModel.find().then(
+            postModel.find().populate('userId', 'name').then(
                 (items)=>{
                     res.json(items)
                 }
@@ -52,7 +52,7 @@ app.post("/viewmypost",(req,res)=>{
     let token=req.headers.token
     jwt.verify(token,"blogApp",(error,decoded)=>{
         if(decoded){
-            postModel.find(input).then(
+            postModel.find(input).populate('userId', 'name').then(
                 (items)=>{
                     res.json(items)
                 }
